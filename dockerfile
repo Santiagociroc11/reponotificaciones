@@ -19,4 +19,4 @@ RUN npm install -g serve
 EXPOSE 1112
 
 # Servir la aplicación con `serve`
-CMD ["sh", "-c", "exec serve -s dist -l 4173"]
+CMD ["sh", "-c", "exec serve -s dist -l 1112"]
