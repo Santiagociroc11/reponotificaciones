@@ -15,7 +15,7 @@ COPY . .
 # Instalar `serve` para producción
 RUN npm install -g serve
 
-# Exponer el puerto 4173
+# Exponer el puerto 1112
 EXPOSE 1112
 
 # Servir la aplicación con `serve`
