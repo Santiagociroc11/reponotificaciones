@@ -1,20 +1,23 @@
-# 🏗 Base: Usa Node.js para ejecutar la app
-FROM node:18-alpine
+# Usa una imagen oficial de Node.js
+FROM node:18
 
-# Establecer el directorio de trabajo dentro del contenedor
+# Define el directorio de trabajo en el contenedor
 WORKDIR /app
 
-# Copiar los archivos del proyecto
+# Copia package.json y package-lock.json e instala TODAS las dependencias
 COPY package.json package-lock.json ./
-
-# Instalar dependencias
 RUN npm install --frozen-lockfile
 
-# Copiar el resto del código fuente
+# Copia el resto del código fuente
 COPY . .
 
-# Exponer el puerto en el que correrá la app (puedes cambiarlo si EasyPanel requiere otro)
+RUN npm run build
+
+# Instalar `serve` para servir la aplicación en producción
+RUN npm install -g serve
+
+# Exponer el puerto 4173 para que EasyPanel lo use
 EXPOSE 1112
 
-# Ejecutar la aplicación con Vite en modo producción
-CMD ["npm", "run", "preview", "--", "--host", "--port", "1112"]
+# Servir la aplicación con `serve`
+CMD ["sh", "-c", "exec serve -s dist -l 1112"]
