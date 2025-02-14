@@ -1,4 +1,6 @@
 import React from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
 import js from 'react-syntax-highlighter/dist/esm/languages/hljs/javascript';
 import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
@@ -11,12 +13,22 @@ interface Props {
   config: NotificationConfig;
 }
 
+// 🔹 Función para convertir emojis a Unicode HTML
+function convertEmojisToHtmlEntities(str: string) {
+  return str.replace(/[\u{0080}-\u{FFFF}]/gu, (match) => {
+    return "&#x" + match.codePointAt(0)?.toString(16) + ";";
+  });
+}
+
 export const CodeGenerator: React.FC<Props> = ({ config }) => {
   const generateCode = () => {
+    // Convierte emojis en la plantilla del mensaje antes de generar el código
+    const safeMessageTemplate = convertEmojisToHtmlEntities(config.messageTemplate);
+
     return `
 <script>
 (function() {
-  const config = ${JSON.stringify(config, null, 2)};
+  const config = ${JSON.stringify({ ...config, messageTemplate: safeMessageTemplate }, null, 2)};
   
   function createNotification() {
     const notification = document.createElement('div');
@@ -72,22 +84,13 @@ export const CodeGenerator: React.FC<Props> = ({ config }) => {
     const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
     const product = products[Math.floor(Math.random() * products.length)];
     
-    let message = '${config.messageTemplate}'
+    let message = '${safeMessageTemplate}'
       .replace('[Name]', firstName + ' ' + lastName)
-      .replace('[Product]', product);
-    
-    message = formatMessage(message);       
-    
+      .replace('[Product]', product);      
+
     return message;
   }
 
-  function formatMessage(message) {
-    return message
-        .split("*").join("<strong>").replace("<strong>", "</strong>") // Negrita
-        .split("_").join("<em>").replace("<em>", "</em>")            // Cursiva
-        .split("~").join("<del>").replace("<del>", "</del>")         // Tachado
-        .split("+").join("<u>").replace("<u>", "</u>");              // Subrayado
-}
   
   function getAnimation() {
     switch('${config.animation}') {

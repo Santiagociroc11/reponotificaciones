@@ -6,8 +6,8 @@ import { CodeGenerator } from './components/CodeGenerator';
 import { Toaster } from 'react-hot-toast';
 
 const defaultConfig: NotificationConfig = {
-  position: 'top-right',
-  animation: 'fade',
+  position: 'bottom-left',
+  animation: 'bounce',
   backgroundColor: '#ffffff',
   textColor: '#000000',
   borderRadius: 8,
@@ -66,7 +66,7 @@ const defaultConfig: NotificationConfig = {
     'Servicio Premium',
     'Gadget Innovador',
   ],
-  messageTemplate: '✅ ¡+COMPRA VERIFICADA:+ *[Name]* acaba de adquirir _[Product]_!',
+  messageTemplate: '✅ ¡COMPRA VERIFICADA: [Name] acaba de adquirir [Product]!',
   shadow: true,
 };
 

@@ -1,4 +1,6 @@
 import React from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { HexColorPicker } from 'react-colorful';
 import { NotificationConfig } from '../types';
 import { Bell, ShoppingCart, Check, Bold, Italic, Underline, Strikethrough } from 'lucide-react';
@@ -193,29 +195,18 @@ López"
 
       <div>
         <h3 className="font-semibold mb-2">Plantilla del Mensaje</h3>
-        <div className="mb-2 p-3 bg-gray-50 rounded text-sm">
-          <p className="font-medium mb-2">Formato de texto:</p>
-          <div className="grid grid-cols-2 gap-2">
-            <div className="flex items-center gap-2">
-              <Bold size={16} /> <code>*texto*</code>
-            </div>
-            <div className="flex items-center gap-2">
-              <Italic size={16} /> <code>_texto_</code>
-            </div>
-            <div className="flex items-center gap-2">
-              <Strikethrough size={16} /> <code>~texto~</code>
-            </div>
-            <div className="flex items-center gap-2">
-              <Underline size={16} /> <code>+texto+</code>
-            </div>
-          </div>
-        </div>
-        <textarea
-          className="w-full p-2 border rounded"
+        <ReactQuill
+          theme="snow"
           value={config.messageTemplate}
-          onChange={(e) => updateConfig({ messageTemplate: e.target.value })}
-          rows={3}
-          placeholder="🚀 ¡*[Name]* acaba de comprar _[Product]_!"
+          onChange={(value) => updateConfig({ messageTemplate: value })}
+          modules={{
+            toolbar: [
+              ['bold', 'italic', 'underline', 'strike'], // Formatos de texto
+              [{ list: 'ordered' }, { list: 'bullet' }], // Listas
+              [{ align: [] }], // Alineación
+              ['clean'], // Limpiar formato
+            ],
+          }}
         />
       </div>
     </div>
