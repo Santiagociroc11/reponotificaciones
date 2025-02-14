@@ -76,15 +76,18 @@ export const CodeGenerator: React.FC<Props> = ({ config }) => {
       .replace('[Name]', firstName + ' ' + lastName)
       .replace('[Product]', product);
     
-    // Apply text formatting
-    message = message
-      .replace(/\*(.*?)\*/g, '<strong>$1</strong>')
-      .replace(/_(.*?)_/g, '<em>$1</em>')
-      .replace(/~(.*?)~/g, '<del>$1</del>')
-      .replace(/\\+(.*?)\\+/g, '<u>$1</u>');
+    message = formatMessage(message);       
     
     return message;
   }
+
+  function formatMessage(message) {
+    return message
+        .split("*").join("<strong>").replace("<strong>", "</strong>") // Negrita
+        .split("_").join("<em>").replace("<em>", "</em>")            // Cursiva
+        .split("~").join("<del>").replace("<del>", "</del>")         // Tachado
+        .split("+").join("<u>").replace("<u>", "</u>");              // Subrayado
+}
   
   function getAnimation() {
     switch('${config.animation}') {
